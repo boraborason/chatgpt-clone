@@ -118,5 +118,6 @@
   }
   body {
     @apply bg-background text-foreground;
+    height: 100vh;/* 페이지 높이가 뷰포트 전체 영역을 차지하도록 설정 */
   }
 }

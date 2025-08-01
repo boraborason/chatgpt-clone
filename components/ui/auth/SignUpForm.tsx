@@ -1,9 +1,22 @@
+'use client' //이벤트 핸들러를 사용하기 위해서는 'client' 컴포넌트로 설정해야함
+
+import { useFormValidate } from "@/hooks/useFormValidate";
 import { Input } from "../input";
 import { Label } from "../label"; // 여러개 컴포넌트가 있는 폴더에서 특정 컴포넌트만 가져올 때는 중괄호 사용 (정확해야함)
 import FormCard from "./FormCard"; // Default export이므로 중괄호 없음
 import { Submit } from "./Submit";
+import { SignUpSchema } from "@/schemas/auth";
 
 export default function SignUpForm() {
+const {error, validateField} = useFormValidate(SignUpSchema); //useFormValidate 훅을 사용하여 유효성 검사 스키마를 가져옴
+
+//유효성 검사 
+const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const { name, value } = e.target;
+    // 여기서 유효성 검사 로직을 추가할 수 있습니다.
+    // 예: 이메일 형식 검사, 비밀번호 강도 검사 등
+}
+
     return (
         <FormCard
             title={"회원가입"}
@@ -21,7 +34,7 @@ export default function SignUpForm() {
                     id="name"
                     name="name"
                     placeholder="이름을 입력해주세요"    
-                    ></Input>
+                    onChange={handleChange}></Input>
                 </div>
                 {/* 이메일 */}
                 <div>
@@ -31,7 +44,7 @@ export default function SignUpForm() {
                     name="email"
                     type="email"
                     placeholder="exam@exam.com"    
-                    ></Input>
+                    onChange={handleChange}></Input>
                 </div>
                 {/* 비밀번호 */}
                 <div>
@@ -41,7 +54,7 @@ export default function SignUpForm() {
                     name="password"
                     type="password"
                     placeholder="********"    
-                    ></Input>
+                    onChange={handleChange}></Input>
                 </div>
                 <Submit className="w-full">회원가입</Submit>
             </form>

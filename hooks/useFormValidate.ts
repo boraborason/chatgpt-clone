@@ -5,14 +5,20 @@
 import { useState } from "react";
 import { ZodObject, ZodRawShape } from "zod";
 
-export function useFormValidate(schema: ZodObject<ZodRawShape>) {    //검증할 스키마를 인자로 받습니다.
+export function useFormValidate<T>(schema: ZodObject<ZodRawShape>) {    //검증할 스키마를 인자로 받습니다. 스키마 타입은 조드 객체입니다. 
   
-  const [error, setError] = useState(); //form의 에러 메세지를 가져옴
+  const [error, setError] = useState<Partial<T>>(); //form의 에러 메세지를 가져옴
   const validateField = (name: string, value: string) => {
-    const parsedValue = schema.pick({ [name]: true }).safeParse({  //인자로 받은 name을 ture로 넘겨주면 해당 필드만 가져옴. 스키마에서 해당 필드만 추출하여 검증합니다.
+    const parsedValue = schema.pick({ [name]: true }).safeParse({  //인자로 받은 name을 키로 ture로 넘겨주면 해당 필드만 가져옴. 스키마에서 해당 필드만 추출하여 검증합니다.
       [name]: value,
     });
-    console.log("parsedValue", parsedValue);
+    if(!parsedValue.success) { //검증에 실패하면 에러를 설정합니다.
+        setError({
+            ...error,
+            ...parsedValue.error.flatten().fieldErrors, //flatten()을 사용하여 각 필드의 이름으로 에러 메세지를 가져올 수 있습니다.
+        });
+    }
+    //console.log("parsedValue", parsedValue);
   };
 
   return {error, validateField};

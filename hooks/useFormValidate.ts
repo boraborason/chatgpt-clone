@@ -9,6 +9,9 @@ export function useFormValidate<T>(schema: ZodObject<ZodRawShape>) {    //검증
   
   const [error, setError] = useState<Partial<T>>(); //form의 에러 메세지를 가져옴
   const validateField = (name: string, value: string) => {
+
+    setError({}); //에러를 초기화합니다.
+
     const parsedValue = schema.pick({ [name]: true }).safeParse({  //인자로 받은 name을 키로 ture로 넘겨주면 해당 필드만 가져옴. 스키마에서 해당 필드만 추출하여 검증합니다.
       [name]: value,
     });
